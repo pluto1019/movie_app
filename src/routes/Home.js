@@ -6,18 +6,17 @@ class Home extends React.Component {
   state = {
     isLoading: true,
     count: 0,
-    moview: [],
+    movies: [],
+    api_key: 'edafd92e71cf23435b09bacb97f14b4d',
   };
-
   getMovies = async () => {
     const {
-      data: {
-        data: { movies },
-      },
+      data: { results },
     } = await axios.get(
-      'https://yts.mx/api/v2/list_movies.json?sort_by=rating'
+      `https://api.themoviedb.org/3/trending/movie/week?api_key=${this.state.api_key}`
     );
-    this.setState({ movies, isLoading: false });
+
+    this.setState({ movies: results, isLoading: false });
   };
 
   componentDidMount() {
@@ -37,10 +36,9 @@ class Home extends React.Component {
                 key={movie.id}
                 title={movie.title}
                 id={movie.id}
-                year={movie.year}
-                summary={movie.summary}
-                poster={movie.medium_cover_image}
-                genres={movie.genres}
+                year={movie.release_date}
+                summary={movie.overview}
+                poster={movie.poster_path}
               />
             );
           })
